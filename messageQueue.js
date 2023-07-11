@@ -1,25 +1,26 @@
 class MessageQueue{
   constructor(){
     this.messages = [];
-    this.listeners = [];
+    this.listeners = {};
   }
 
-  enqueMessage(message){
+  enqueMessage(topic, message){
     this.messages.push(message);
-    this.notifyListeners(message);
+    this.notifyListeners(topic, message);
   }
 
-  subscribe(listener){
-    this.listeners.push(listener)
+  subscribe(topic,listener){
+    this.listeners[topic] = this.listeners[topic] ? this.listeners[topic] : [];
+    this.listeners[topic].push(listener)
   }
 
-  unsubscribe(name){
-    this.listeners = this.listeners.filter(listener => listener.name != name);
+  unsubscribe(topic, name){
+    this.listeners[topic] = this.listeners[topic].filter(listener => listener.name != name);
   }
 
-  notifyListeners(message){
-    for(let listener of this.listeners){
-      listener.update(message)
+  notifyListeners(topic, message){
+    for(let listener of this.listeners[topic]){
+      listener.update(topic, message)
     }
   }
 }
@@ -28,18 +29,19 @@ class Listner{
   constructor(name){
     this.name = name;
   }
-  update(message){
-    console.log(`${this.name} received a message - ${message}`)
+  update(topic, message){
+    console.log(`${this.name} received a message - ${message} on ${topic}`)
   }
 }
 
 const queue = new MessageQueue();
-queue.subscribe(new Listner("Listner A"))
-queue.subscribe(new Listner("Listner B"))
-queue.subscribe(new Listner("Listner C"))
-queue.enqueMessage("Message 1")
-queue.subscribe(new Listner("Listner D"))
-queue.enqueMessage("Message 2")
-queue.unsubscribe("Listner B")
-queue.enqueMessage("Message 3")
+queue.subscribe("topic1", new Listner("Listner A"))
+queue.subscribe("topic1",new Listner("Listner B"))
+queue.subscribe("topic2",new Listner("Listner C"))
+queue.enqueMessage("topic1","Message 1")
+queue.subscribe("topic1", new Listner("Listner D"))
+queue.enqueMessage("topic1", "Message 2")
+queue.enqueMessage("topic2", "Message 3")
+queue.unsubscribe("topic1", "Listner B")
+queue.enqueMessage("topic1", "Message 4")
 
