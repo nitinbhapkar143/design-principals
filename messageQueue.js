@@ -1,3 +1,5 @@
+const Logger = require("./design-patterns/singletone/logger")
+const logger = new Logger().getInstance();
 class MessageQueue{
   constructor(){
     this.messages = [];
@@ -30,7 +32,7 @@ class Listner{
     this.name = name;
   }
   update(topic, message){
-    console.log(`${this.name} received a message - ${message} on ${topic}`)
+    logger.log(`${this.name} received a message - ${message} on ${topic}`)
   }
 }
 

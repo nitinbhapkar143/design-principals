@@ -1,3 +1,5 @@
+const Logger = require("./design-patterns/singletone/logger")
+const logger = new Logger().getInstance();
 class Item{
   constructor(name, price, quantity){
     this.name = name;
@@ -23,16 +25,16 @@ class Sandwitch extends Item{
     this.prepareBread()
     this.prepareStuffing()
     this.prepareGrill();
-    console.log(`Item Prepared`);
+    logger.log(`Item Prepared`);
   }
   prepareBread(){
-    console.log(`Preparing bread`)
+    logger.log(`Preparing bread`)
   }
   prepareStuffing(){
-    console.log(`Preparing stuffing`)
+    logger.log(`Preparing stuffing`)
   }
   prepareGrill(){
-    console.log(`Preparing to grill`)
+    logger.log(`Preparing to grill`)
   }
 }
 
@@ -47,9 +49,9 @@ class Customer{
   payBill(amount){
     if(amount < this.balance){
       this.balance -= amount;
-      console.log(`Amount paid in full - ${amount}. Balance after paying ${this.balance}`);
+      logger.log(`Amount paid in full - ${amount}. Balance after paying ${this.balance}`);
     }else{
-      console.log("Not enough balance")
+      logger.log("Not enough balance")
     }
   }
 }
@@ -61,7 +63,7 @@ class Order{
     this.items = []
   }
   addItem(item){
-    console.log(`Add item to order ${item.name}`)
+    logger.log(`Add item to order ${item.name}`)
     this.items.push(item);
   }
   removeItem(item){
@@ -72,7 +74,7 @@ class Order{
     for(let item of this.items){
       totalOrderAmount += item.getItemTotal();
     }
-    console.log(`Bill prepared for order ${this.orderId}`)
+    logger.log(`Bill prepared for order ${this.orderId}`)
     return totalOrderAmount;
   }
 }
@@ -84,23 +86,23 @@ class Robot{
   }
 
   takeOrder(order){
-    console.log(`Taking order for customer ${order.customer.name}`);
+    logger.log(`Taking order for customer ${order.customer.name}`);
     this.orders.push(order)
   }
 
   prepare(){
     for(let order of this.orders){
-      console.log(`Sending to prepare order with OrderId ${order.orderId}`)
+      logger.log(`Sending to prepare order with OrderId ${order.orderId}`)
       for(let item of order.items){
         item.prepare();
       }
     }
   }
   prepareBill(orderId){
-    console.log(`Preparing order bill ${orderId}`)
+    logger.log(`Preparing order bill ${orderId}`)
     const order = this.orders.find(order => order.orderId == orderId)
     const bill = order.prepareBill();
-    console.log(`The bill for ${order.customer.name} is ${bill}`);
+    logger.log(`The bill for ${order.customer.name} is ${bill}`);
     return bill;
   }
 }

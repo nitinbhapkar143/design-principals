@@ -1,3 +1,5 @@
+const Logger = require("./design-patterns/singletone/logger")
+const logger = new Logger().getInstance();
 class Node{
   constructor(prev = null, next = null, key = null, value = null){
     this.prev = prev;
@@ -71,7 +73,7 @@ class Cache{
   printCache(){
     let node = this.head;
     while(node != null){
-      console.log({value :node.value, key : node.key});
+      logger.log({value :node.value, key : node.key});
       node = node.next;
     }
   }
@@ -83,11 +85,11 @@ cache.set("key2", "value2");
 cache.set("key3", "value3");
 cache.set("key4", "value4");
 cache.set("key5", "value5");
-console.log(cache.get("key2"));
+logger.log(cache.get("key2"));
 
 cache.set("key6", "value6");
-console.log(cache.get("key1"));
-console.log(cache.get("key5"));
+logger.log(cache.get("key1"));
+logger.log(cache.get("key5"));
 
-// console.log(cache.get("key1"));
+// logger.log(cache.get("key1"));
 cache.printCache();
